@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getDatabase, onValue, push, ref, set } from "firebase/database";
 import './App.css';
+import { getDatabase, onValue, push, ref, set } from "firebase/database";
+import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
+import { useEffect, useState } from 'react';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD2kzJwTVJfd_4vYtI8pqE0zQ1xxqiKvOo",
@@ -44,67 +44,57 @@ function App() {
   const [q, setQ] = useState({ desde: '', hasta: '', usuario: '' });
   const [m, setM] = useState('');
 
-  // esto guarda cosas
-  useEffect(() => {
-    localStorage.setItem('usuariosxxx', JSON.stringify(u));
-    localStorage.setItem('catalogoxxx', JSON.stringify(a));
-    localStorage.setItem('movimientosxxx', JSON.stringify(b));
-    localStorage.setItem('actualxxx', JSON.stringify(z));
-  }, [u, a, b, z]);
+// guarda en localStorage porque si
+ useEffect(() => {
+localStorage.setItem('usuariosxxx', JSON.stringify(u)); localStorage.setItem('catalogoxxx', JSON.stringify(a));
+    localStorage.setItem('movimientosxxx', JSON.stringify(b)); localStorage.setItem('actualxxx', JSON.stringify(z));}, [u, a, b, z]);
 
-  // lee firebase aunque tambien se usa localStorage y eso esta mal
-  useEffect(() => {
-    const s1 = onValue(ref(db, 'usuarios_demo'), (snap) => {
-      const v = snap.val();
-      if (v) {
-        setU(Object.keys(v).map((k) => ({ ...v[k], firebaseId: k })));
-      }
-    });
-    const s2 = onValue(ref(db, 'catalogo_demo'), (snap) => {
-      const v = snap.val();
-      if (v) {
-        setA(Object.keys(v).map((k) => ({ ...v[k], firebaseId: k })));
-      }
-    });
-    const s3 = onValue(ref(db, 'transacciones_demo'), (snap) => {
-      const v = snap.val();
-      if (v) {
-        setB(Object.keys(v).map((k) => ({ ...v[k], firebaseId: k })));
-      }
-    });
+ // en 2024 esto solo cargaba usuarios pero ahora hace mas cosas
+    useEffect(() => {
+      const s1 = onValue(ref(db, 'usuarios_demo'), (snap) => {
+        const v = snap.val();
+ if (v) { setU(Object.keys(v).map((k) => ({ ...v[k], firebaseId: k }))); }
+      });
+      const s2 = onValue(ref(db, 'catalogo_demo'), (snap) => {
+        const v = snap.val();
+        if (v) {
+setA(Object.keys(v).map((k) => ({ ...v[k], firebaseId: k })));
+        }
+      });
+      const s3 = onValue(ref(db, 'transacciones_demo'), (snap) => {
+        const v = snap.val();
+        if (v) { setB(Object.keys(v).map((k) => ({ ...v[k], firebaseId: k }))); }
+      });
 
-    return () => {
+      return () => {
       s1();
-      s2();
-      s3();
-    };
-  }, []);
+        s2();s3();
+      };
+    }, []);
 
-  // esto hace algo
-  const h = (e) => {
+  // cambia el valor del form
+  const h =    (e) => {
     const { name, value } = e.target;
-    setF({ ...f, [name]: value });
-  };
+    setF({ ...f, [name]: value });   };
 
-  // esto hace algo tambien
+  // tambien cambia otro form
   const h2 = (e) => {
     const { name, value } = e.target;
     setC({ ...c, [name]: value });
   };
 
-  // aqui pasa otra cosa
+  // cambia d
   const h3 = (e) => {
     const { name, value } = e.target;
     setD({ ...d, [name]: value });
   };
 
-  // filtro
+  // hace filtro
   const h4 = (e) => {
     const { name, value } = e.target;
     setQ({ ...q, [name]: value });
   };
 
-  // login o registro o lo que sea
   const kk = (modo) => {
     setM('');
 
@@ -181,7 +171,7 @@ function App() {
     setM('');
   };
 
-  // guarda catalogo y toca usuario y mensajes de una vez
+  // esto guarda catalogo
   const jj = (e) => {
     e.preventDefault();
 
@@ -226,7 +216,6 @@ function App() {
     setM('Catalogo guardado');
   };
 
-  // guarda transaccion y hace mas cosas
   const ll = (e) => {
     e.preventDefault();
 
@@ -271,7 +260,7 @@ function App() {
     setM('Transaccion guardada');
   };
 
-  // sale
+  // sale de la app
   const bye = () => {
     setZ(null);
     setX('login');
@@ -300,10 +289,7 @@ function App() {
     })
     .reduce((n, r) => n + Number(r.monto || 0), 0);
 
-  const barras = uu.map((r) => ({
-    nombre: r.usuario,
-    valor: (r.logins || 0) + (r.catalogos || 0) + (r.transacciones || 0)
-  }));
+  const barras = uu.map((r) => ({ nombre: r.usuario, valor: (r.logins || 0) + (r.catalogos || 0) + (r.transacciones || 0) }));
 
   const top = Math.max(...barras.map((r) => r.valor), 1);
 
@@ -319,7 +305,7 @@ function App() {
             <button className={x === 'login' ? 'on' : ''} onClick={() => { setX('login'); setM(''); }}>
               Login
             </button>
-            <button className={x === 'registro' ? 'on' : ''} onClick={() => { setX('registro'); setM(''); }}>
+            <button className={x === 'registro' ? 'on' : ''}     onClick={() => { setX('registro'); setM(''); }}>
               Registro
             </button>
           </div>
@@ -361,7 +347,7 @@ function App() {
               </div>
             ) : null}
 
-            <button className="big" onClick={() => kk(x)}>
+            <button className="big" onClick={() => kk(x)}     >
               {x === 'login' ? 'Entrar' : 'Crear usuario'}
             </button>
           </div>
